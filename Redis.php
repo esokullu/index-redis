@@ -28,7 +28,7 @@ use GraphAware\Neo4j\Client\ClientBuilder;
 class Neo4j implements IndexInterface, ServiceInterface
 {
 
-     /**
+    /**
      * Pho-kernel 
      * @var Kernel
      */
@@ -39,6 +39,11 @@ class Neo4j implements IndexInterface, ServiceInterface
      * @var \GraphAware\Neo4j\Client\Client
      */
     protected $client;
+
+    /**
+     * string
+     */
+    protected $uri;
 
 
     /**
@@ -52,12 +57,8 @@ class Neo4j implements IndexInterface, ServiceInterface
     public function __construct(Kernel $kernel, string $uri = "")
     {
         $this->kernel = $kernel;
-     
-        $params = parse_url($uri);
-        $this->client = ClientBuilder::create()
-            ->addConnection($params["scheme"], $uri) 
-            ->build();
-        
+        $this->uri = $uri;
+        $this->client = new \Predis\Client($uri);
         $this->subscribeGraphsystem();
     }
 
